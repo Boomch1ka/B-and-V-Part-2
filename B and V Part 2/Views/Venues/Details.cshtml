@@ -1,0 +1,19 @@
+@model B_and_V_Part_2.Models.Venue
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<h2>Venue Details</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.VenueName</h5>
+        <p class="card-text">Location: @Model.Location</p>
+        <p class="card-text">Capacity: @Model.Capacity</p>
+        @if(!string.IsNullOrEmpty(Model.ImageUrl)) {
+            <img src="@Model.ImageUrl" alt="@Model.VenueName" class="img-fluid" />
+        }
+        <div class="mt-3">
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

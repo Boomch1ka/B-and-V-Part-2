@@ -1,0 +1,24 @@
+@model B_and_V_Part_2.Models.Venue
+@{
+    ViewData["Title"] = "Delete Venue";
+}
+
+<h2>Delete Venue</h2>
+
+@if(TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.VenueName</h5>
+        <p class="card-text">Location: @Model.Location</p>
+        <p class="card-text">Capacity: @Model.Capacity</p>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="VenueId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>

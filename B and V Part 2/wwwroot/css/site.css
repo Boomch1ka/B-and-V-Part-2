@@ -1,0 +1,64 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Base typography and responsive sizing */
+:root{
+  --brand-1: #0ea5e9; /* sky blue */
+  --brand-2: #7c3aed; /* purple */
+  --accent: #06b6d4; /* teal */
+  --muted: #6b7280;
+  --bg: #f8fafc;
+}
+
+html{font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+body{background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%); color:#111827;}
+
+/* Navbar */
+.main-navbar{background: linear-gradient(90deg,var(--brand-1),var(--brand-2));}
+.brand-mark{display:inline-block; background:rgba(255,255,255,0.15); padding:8px 12px; border-radius:8px; color:white; font-weight:700}
+.brand-text{color:white; font-weight:600}
+.navbar .nav-link{color:rgba(255,255,255,0.9)}
+.navbar .nav-link:hover{color:white; text-decoration:underline}
+
+/* Hero */
+.hero{padding:48px 0; text-align:center}
+.hero .display-4{font-weight:700; color:#0f172a}
+.hero .lead{color:var(--muted)}
+
+/* Cards */
+.card-venue{border:none; border-radius:12px; box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+.card-venue .card-img-top{border-top-left-radius:12px; border-top-right-radius:12px; height:180px; object-fit:cover}
+
+/* Footer */
+.site-footer{background:linear-gradient(180deg, rgba(124,58,237,0.06), transparent)}
+.site-footer a{color:var(--muted)}
+
+/* Form focus improvements */
+.form-control:focus{box-shadow:0 0 0 0.15rem rgba(14,165,233,0.18); border-color:var(--brand-1)}
+
+/* Layout spacing */
+.container{max-width:1100px}
+
+@media (min-width: 768px){
+  .hero{padding:64px 0}
+}

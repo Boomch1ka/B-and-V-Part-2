@@ -1,0 +1,17 @@
+@model B_and_V_Part_2.Models.Booking
+@{
+    ViewData["Title"] = "Delete Booking";
+}
+
+<h2>Delete Booking</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Event?.EventName - @Model.Venue?.VenueName</h5>
+        <p class="card-text">Date: @Model.BookingDate.ToString("yyyy-MM-dd")</p>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="BookingId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>

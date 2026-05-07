@@ -1,0 +1,16 @@
+@model B_and_V_Part_2.Models.Event
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h2>Event Details</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.EventName</h5>
+        <p class="card-text">Date: @Model.EventDate.ToString("yyyy-MM-dd")</p>
+        <p class="card-text">@Model.Description</p>
+        <div class="mt-3">
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

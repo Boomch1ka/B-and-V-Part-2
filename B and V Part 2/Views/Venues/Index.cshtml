@@ -1,0 +1,51 @@
+@model IEnumerable<B_and_V_Part_2.Models.Venue>
+@{
+    ViewData["Title"] = "Venues";
+    var search = ViewData["Search"] as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Venues</h2>
+    <a class="btn btn-primary" asp-action="Create">New Venue</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="search" value="@search" class="form-control" placeholder="Search venues or location" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </div>
+</form>
+
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach(var v in Model) {
+    <tr>
+        <td style="width:80px;">
+            @if(!string.IsNullOrEmpty(v.ImageUrl))
+            {
+                <img src="@v.ImageUrl" alt="@v.VenueName" style="width:72px;height:48px;object-fit:cover;border-radius:6px;" />
+            }
+        </td>
+        <td>@v.VenueName</td>
+        <td>@v.Location</td>
+        <td>@v.Capacity</td>
+        <td>
+            <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@v.VenueId">Details</a>
+            <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@v.VenueId">Edit</a>
+            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@v.VenueId">Delete</a>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

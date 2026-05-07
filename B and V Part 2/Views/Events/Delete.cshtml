@@ -1,0 +1,24 @@
+@model B_and_V_Part_2.Models.Event
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<h2>Delete Event</h2>
+
+@if(TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.EventName</h5>
+        <p class="card-text">Date: @Model.EventDate.ToString("yyyy-MM-dd")</p>
+        <p class="card-text">@Model.Description</p>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="EventId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>

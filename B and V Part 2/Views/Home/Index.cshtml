@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="hero">
+    <div class="container">
+        <h1 class="display-4 mb-3">Find the perfect venue for your event</h1>
+        <p class="lead mb-4">Explore curated venues and events — simple booking, beautiful spaces.</p>
+
+        <div class="d-flex justify-content-center mb-4">
+            <a class="btn btn-light btn-lg me-2" href="#venues">Explore Venues</a>
+            <a class="btn btn-outline-light btn-lg" href="#events">Browse Events</a>
+        </div>
+
+        <div class="row g-4" id="venues">
+            <div class="col-md-4">
+                <div class="card card-venue">
+                    <img src="https://picsum.photos/seed/venue1/600/300" class="card-img-top" alt="Venue 1" />
+                    <div class="card-body">
+                        <h5 class="card-title">Grand Hall</h5>
+                        <p class="card-text text-muted">Capacity 500 • Downtown</p>
+                        <a href="#" class="btn btn-sm btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-venue">
+                    <img src="https://picsum.photos/seed/venue2/600/300" class="card-img-top" alt="Venue 2" />
+                    <div class="card-body">
+                        <h5 class="card-title">Lakeside Terrace</h5>
+                        <p class="card-text text-muted">Capacity 200 • Lakeside</p>
+                        <a href="#" class="btn btn-sm btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-venue">
+                    <img src="https://picsum.photos/seed/venue3/600/300" class="card-img-top" alt="Venue 3" />
+                    <div class="card-body">
+                        <h5 class="card-title">Garden Pavilion</h5>
+                        <p class="card-text text-muted">Capacity 120 • Suburbs</p>
+                        <a href="#" class="btn btn-sm btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" id="events">
+    <h3 class="mb-4">Featured Events</h3>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="p-4 rounded-3" style="background:linear-gradient(90deg, rgba(12,74,110,0.06), rgba(124,58,237,0.04));">
+                <h5>Summer Jazz Night</h5>
+                <p class="text-muted">June 21 • Lakeside Terrace</p>
+                <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 rounded-3" style="background:linear-gradient(90deg, rgba(14,165,233,0.06), rgba(124,58,237,0.04));">
+                <h5>Community Market</h5>
+                <p class="text-muted">Every Weekend • Garden Pavilion</p>
+                <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+            </div>
+        </div>
+    </div>
+</div>
