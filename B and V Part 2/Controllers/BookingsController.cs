@@ -92,17 +92,28 @@ namespace B_and_V_Part_2.Controllers
             return View(booking);
         }
 
-        // POST: Bookings/Delete/5
+        // VenueController.cs
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null) return NotFound();
-            _context.Bookings.Remove(booking);
+            var venue = await _context.Venues
+                .Include(v => v.Bookings)
+                .FirstOrDefaultAsync(v => v.VenueId == id);
+
+            if (venue == null) return NotFound();
+
+            if (venue.Bookings.Any())
+            {
+                TempData["Error"] = "Cannot delete venue with active bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Venues.Remove(venue);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> Details(int? id)
         {

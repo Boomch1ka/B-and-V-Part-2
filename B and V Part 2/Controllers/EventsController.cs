@@ -95,22 +95,27 @@ namespace B_and_V_Part_2.Controllers
             return View(ev);
         }
 
+        // EventsController.cs
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ev = await _context.Events.FindAsync(id);
-            if (ev == null) return NotFound();
+            var evnt = await _context.Events
+                .Include(e => e.Bookings)
+                .FirstOrDefaultAsync(e => e.EventId == id);
 
-            if (await _context.HasActiveBookingsForEventAsync(id))
+            if (evnt == null) return NotFound();
+
+            if (evnt.Bookings.Any())
             {
-                TempData["DeleteError"] = "This event has active or upcoming bookings and cannot be deleted.";
-                return RedirectToAction(nameof(Delete), new { id });
+                TempData["Error"] = "Cannot delete event with active bookings.";
+                return RedirectToAction(nameof(Index));
             }
 
-            _context.Events.Remove(ev);
+            _context.Events.Remove(evnt);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
