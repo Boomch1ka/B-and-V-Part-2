@@ -2,10 +2,20 @@
 @{
     ViewData["Title"] = "Create Event";
 }
-
 <h2>Create Event</h2>
 
-<form asp-action="Create" method="post">
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="EventTypeId" class="form-label">Event Type</label>
+        <select asp-for="EventTypeId" asp-items="ViewBag.EventTypeId" class="form-select">
+            <option value="">-- Select Type --</option>
+        </select>
+    </div>
     <div class="mb-3">
         <label class="form-label">Name</label>
         <input asp-for="EventName" class="form-control" />
@@ -17,14 +27,17 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Description</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Event Image</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

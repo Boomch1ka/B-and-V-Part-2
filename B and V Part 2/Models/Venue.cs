@@ -16,6 +16,8 @@ namespace B_and_V_Part_2.Models
 
         public string ImageUrl { get; set; }
 
+        public bool IsAvailable { get; set; } = true;
+
         public ICollection<Booking> Bookings { get; set; }
     }
 }

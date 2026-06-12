@@ -18,14 +18,16 @@ namespace B_and_V_Part_2.Controllers
             _context = context;
         }
 
-        // GET: Bookings
         public async Task<IActionResult> Index(string search, DateTime? date, int page = 1, int pageSize = 10)
         {
-            var query = _context.Bookings.Include(b => b.Venue).Include(b => b.Event).AsQueryable();
+            var query = _context.Bookings
+                .Include(b => b.Venue)
+                .Include(b => b.Event)
+                .AsQueryable();
+
             if (!string.IsNullOrEmpty(search))
-            {
                 query = query.Where(b => b.Venue.VenueName.Contains(search) || b.Event.EventName.Contains(search));
-            }
+
             if (date.HasValue)
             {
                 var start = date.Value.Date;
@@ -51,7 +53,6 @@ namespace B_and_V_Part_2.Controllers
             return View(list);
         }
 
-        // GET: Bookings/Create
         public async Task<IActionResult> Create()
         {
             ViewData["VenueId"] = new SelectList(await _context.Venues.ToListAsync(), "VenueId", "VenueName");
@@ -59,21 +60,25 @@ namespace B_and_V_Part_2.Controllers
             return View();
         }
 
-        // POST: Bookings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EventId,VenueId,BookingDate")] Booking booking)
         {
+            // Remove nav property validation errors
+            ModelState.Remove("Event");
+            ModelState.Remove("Venue");
+
             if (ModelState.IsValid)
             {
                 if (await _context.HasBookingConflictAsync(booking.VenueId, booking.BookingDate))
                 {
-                    ModelState.AddModelError(string.Empty, "The selected venue is already booked on that date.");
+                    ModelState.AddModelError(string.Empty, "This venue is already booked on that date. Please choose a different date or venue.");
                 }
                 else
                 {
                     _context.Add(booking);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Booking created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -83,44 +88,40 @@ namespace B_and_V_Part_2.Controllers
             return View(booking);
         }
 
-        // GET: Bookings/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var booking = await _context.Bookings.Include(b => b.Event).Include(b => b.Venue).FirstOrDefaultAsync(b => b.BookingId == id);
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .FirstOrDefaultAsync(b => b.BookingId == id);
             if (booking == null) return NotFound();
             return View(booking);
         }
 
-        // VenueController.cs
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .FirstOrDefaultAsync(b => b.BookingId == id);
+            if (booking == null) return NotFound();
+            return View(booking);
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venue = await _context.Venues
-                .Include(v => v.Bookings)
-                .FirstOrDefaultAsync(v => v.VenueId == id);
-
-            if (venue == null) return NotFound();
-
-            if (venue.Bookings.Any())
-            {
-                TempData["Error"] = "Cannot delete venue with active bookings.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            _context.Venues.Remove(venue);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null) return NotFound();
-            var booking = await _context.Bookings.Include(b => b.Event).Include(b => b.Venue).FirstOrDefaultAsync(b => b.BookingId == id);
+            // FIXED: was incorrectly deleting a Venue, now correctly deletes a Booking
+            var booking = await _context.Bookings.FindAsync(id);
             if (booking == null) return NotFound();
-            return View(booking);
+
+            _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Booking deleted successfully.";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

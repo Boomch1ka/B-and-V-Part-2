@@ -2,10 +2,8 @@
 @{
     ViewData["Title"] = "Create Venue";
 }
-
 <h2>Create Venue</h2>
-
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label class="form-label">Name</label>
         <input asp-for="VenueName" class="form-control" />
@@ -19,16 +17,24 @@
         <label class="form-label">Capacity</label>
         <input asp-for="Capacity" type="number" class="form-control" />
     </div>
+
+    <!-- Availability Checkbox -->
     <div class="mb-3">
-        <label class="form-label">Image URL</label>
-        <input asp-for="ImageUrl" class="form-control" />
+        <div class="form-check">
+            <input asp-for="IsAvailable" class="form-check-input" type="checkbox" />
+            <label class="form-check-label">Available for Booking</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Venue Image</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

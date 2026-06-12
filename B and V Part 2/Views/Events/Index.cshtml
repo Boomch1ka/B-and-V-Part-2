@@ -1,7 +1,15 @@
-@model IEnumerable<B_and_V_Part_2.Models.Event>
+@model B_and_V_Part_2.Models.EventFilterViewModel
 @{
     ViewData["Title"] = "Events";
-    var search = ViewData["Search"] as string;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -9,34 +17,86 @@
     <a class="btn btn-primary" asp-action="Create">New Event</a>
 </div>
 
-<form method="get" class="row g-2 mb-3">
-    <div class="col-auto">
-        <input type="text" name="search" value="@search" class="form-control" placeholder="Search events or description" />
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <input type="text" name="search" value="@Model.Search"
+               class="form-control" placeholder="Search name or description" />
     </div>
-    <div class="col-auto">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <div class="col-md-2">
+        <select name="eventTypeId" class="form-select">
+            <option value="">All Types</option>
+            @foreach (var item in Model.EventTypes)
+            {
+                <option value="@item.Value" selected="@(item.Selected)">@item.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="dateFrom"
+               value="@Model.DateFrom?.ToString("yyyy-MM-dd")"
+               class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="dateTo"
+               value="@Model.DateTo?.ToString("yyyy-MM-dd")"
+               class="form-control" />
+    </div>
+    <div class="col-md-auto">
+        <button class="btn btn-outline-secondary" type="submit">Filter</button>
+        <a class="btn btn-outline-danger ms-1" asp-action="Index">Clear</a>
     </div>
 </form>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach(var e in Model) {
-    <tr>
-        <td>@e.EventName</td>
-        <td>@e.EventDate.ToString("yyyy-MM-dd")</td>
-        <td>
-            <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@e.EventId">Details</a>
-            <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@e.EventId">Edit</a>
-            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@e.EventId">Delete</a>
-        </td>
-    </tr>
+@if (!Model.Events.Any())
+{
+    <div class="alert alert-info">No events match your filters.</div>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.Events)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(e.ImageUrl))
+                        {
+                            <img src="@e.ImageUrl" alt="@e.EventName"
+                                 style="width:80px;height:55px;object-fit:cover;border-radius:6px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No image</span>
+                        }
+                    </td>
+                    <td>@e.EventName</td>
+                    <td>
+                        @if (e.EventType != null)
+                        {
+                            <span class="badge bg-secondary">@e.EventType.Name</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>@e.EventDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@e.EventId">Details</a>
+                        <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@e.EventId">Edit</a>
+                        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@e.EventId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

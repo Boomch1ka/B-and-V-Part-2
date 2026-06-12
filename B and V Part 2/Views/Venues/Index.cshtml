@@ -4,6 +4,15 @@
     var search = ViewData["Search"] as string;
 }
 
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Venues</h2>
     <a class="btn btn-primary" asp-action="Create">New Venue</a>
@@ -11,17 +20,26 @@
 
 <form method="get" class="row g-2 mb-3">
     <div class="col-auto">
-        <input type="text" name="search" value="@search" class="form-control" placeholder="Search venues or location" />
+        <input type="text" name="search" value="@search" class="form-control" placeholder="Search name or location" />
+    </div>
+    <div class="col-auto">
+        <select name="isAvailable" class="form-select">
+            <option value="">All Venues</option>
+            <option value="true" selected="@(ViewData["IsAvailable"]?.ToString() == "True")">Available</option>
+            <option value="false" selected="@(ViewData["IsAvailable"]?.ToString() == "False")">Unavailable</option>
+        </select>
     </div>
     <div class="col-auto">
         <button class="btn btn-outline-secondary" type="submit">Search</button>
+        <a class="btn btn-outline-danger ms-1" asp-action="Index">Clear</a>
     </div>
 </form>
+
 
 <table class="table table-hover align-middle">
     <thead>
         <tr>
-            <th></th>
+            <th>Image</th>
             <th>Name</th>
             <th>Location</th>
             <th>Capacity</th>
@@ -29,23 +47,29 @@
         </tr>
     </thead>
     <tbody>
-@foreach(var v in Model) {
-    <tr>
-        <td style="width:80px;">
-            @if(!string.IsNullOrEmpty(v.ImageUrl))
-            {
-                <img src="@v.ImageUrl" alt="@v.VenueName" style="width:72px;height:48px;object-fit:cover;border-radius:6px;" />
-            }
-        </td>
-        <td>@v.VenueName</td>
-        <td>@v.Location</td>
-        <td>@v.Capacity</td>
-        <td>
-            <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@v.VenueId">Details</a>
-            <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@v.VenueId">Edit</a>
-            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@v.VenueId">Delete</a>
-        </td>
-    </tr>
-}
+        @foreach (var v in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(v.ImageUrl))
+                    {
+                        <img src="@v.ImageUrl" alt="@v.VenueName"
+                             style="width:80px;height:55px;object-fit:cover;border-radius:6px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">No image</span>
+                    }
+                </td>
+                <td>@v.VenueName</td>
+                <td>@v.Location</td>
+                <td>@v.Capacity</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@v.VenueId">Details</a>
+                    <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@v.VenueId">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@v.VenueId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
